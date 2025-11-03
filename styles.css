@@ -1,0 +1,381 @@
+/* =========================================
+   DistribuTrack Base Styles (improved)
+   - Variable palette
+   - Strong focus states
+   - Reduced-motion support
+   - Keeps original class names
+========================================= */
+
+/* ---------- CSS Variables ---------- */
+:root{
+  --bg:#f8fafc;
+  --text:#1e293b;
+  --brand-900:#1a365d;
+  --brand-800:#2a4365;
+  --teal-600:#2c7a7b;
+  --teal-500:#38b2ac;
+  --ring:#60a5fa;
+  --shadow:rgba(0,0,0,.08);
+  --shadow-2:rgba(0,0,0,.10);
+  --shadow-3:rgba(0,0,0,.20);
+}
+
+/* ---------- Global ---------- */
+*,
+*::before,
+*::after{ box-sizing:border-box; }
+
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family:"Merriweather",serif;
+  background-color:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+  transition:background-color .3s ease;
+}
+
+a{ text-decoration:none; color:inherit; transition:all .2s ease; }
+
+/* Focus-visible for keyboard users */
+:focus-visible{
+  outline:3px solid var(--ring);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* Utility: screen-reader only */
+.sr-only{
+  position:absolute!important; width:1px; height:1px;
+  padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0);
+  white-space:nowrap; border:0;
+}
+
+/* Base logo sizing */
+.logo{ width:100px; height:auto; }
+
+/* ---------- Navbar ---------- */
+.navbar{
+  background-color:var(--brand-900);
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 32px;
+  box-shadow:0 4px 12px var(--shadow);
+  position:sticky; top:0; z-index:1000;
+}
+
+.navbar-start .logo{
+  width:100px; height:auto; transition:transform .3s ease;
+}
+.navbar-start .logo:hover{ transform:scale(1.05); }
+
+.logo-link:focus-visible .logo{
+  outline:3px solid var(--ring);
+  outline-offset:4px; border-radius:8px;
+}
+
+/* ---------- Login Button ---------- */
+.login-button{
+  background-color:var(--teal-600); color:#fff;
+  padding:12px 28px; font-size:16px; font-weight:600;
+  border-radius:8px; border:none; cursor:pointer;
+  transition:all .3s ease;
+  box-shadow:0 4px 6px rgba(44,122,123,.2);
+}
+.login-button:hover{
+  background-color:var(--teal-500);
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(44,122,123,.3);
+}
+.login-button:active{ transform:translateY(0); box-shadow:0 2px 4px rgba(44,122,123,.2); }
+
+/* ---------- Hero / Background ---------- */
+.background{
+  position:relative; width:100%; height:100vh; overflow:hidden;
+}
+.background img{
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(75%); transform:scale(1.01);
+  transition:filter .5s ease, transform 8s ease;
+}
+.background:hover img{ filter:brightness(80%); transform:scale(1.05); }
+
+.content{
+  position:absolute; top:40%; left:10%;
+  color:#fff; text-shadow:1px 1px 8px rgba(0,0,0,.6);
+  max-width:600px;
+}
+
+.tagline{
+  font-size:44px; font-weight:700; margin:0 0 24px;
+  font-family:"Sour Gummy",sans-serif; line-height:1.2;
+  animation:fadeInUp .8s ease-out both;
+}
+
+/* ---------- Search (Unified wrapper) ---------- */
+.search-container{
+  display:flex; align-items:center; margin-top:16px;
+  animation:fadeInUp .8s ease-out .2s both;
+}
+
+/* Wrapper ensures input + button act as a single control */
+.search-wrapper{
+  display:flex;                     /* ensure perfect alignment */
+  align-items:stretch;
+  width:max-content;
+  border-radius:10px; overflow:hidden;
+  box-shadow:0 4px 12px var(--shadow-2);
+  line-height:0;                     /* fix baseline gap */
+  vertical-align:middle;
+}
+
+.search-input{
+  width:320px; height:48px;                 /* input height */
+  padding:0 16px; border:none;
+  font-size:16px; background-color:rgba(255,255,255,.95);
+  color:var(--text); outline:none;
+}
+.search-input:focus{
+  background-color:#fff;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.04);
+}
+
+.search-button{
+  height:48px;                               /* match input height */
+  padding:0 22px;                            /* balanced horizontal padding */
+  background-color:var(--teal-600); color:#fff;
+  border:0; cursor:pointer;                  /* ensure no border height variance */
+  font-size:16px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  min-width:120px;                           /* prevents clipping of 'Search' */
+  white-space:nowrap;
+  transition:background .3s ease, transform .2s ease;
+  line-height:1;                             /* avoids extra vertical space */
+}
+.search-button:hover{ background-color:var(--teal-500); transform:translateY(-1px); }
+.search-button:active{ transform:scale(.98); }
+
+/* Icon sizing */
+.search-button i{ font-size:18px; line-height:1; }
+
+/* When Font Awesome is missing, hide the empty <i> and keep the label centered */
+.no-fa .search-button i{ display:none; }
+
+/* ---------- Slogan ---------- */
+.slogan{
+  text-align:center; margin:48px 0; font-size:28px;
+  color:var(--text); font-family:"Sour Gummy",sans-serif;
+  animation:fadeIn 1s ease-out both;
+}
+.slogan-section{ background:#fff; padding:24px 0; }
+
+/* ---------- Footer ---------- */
+footer{
+  background-color:var(--brand-900); color:#fff;
+  text-align:center; padding:48px 32px; margin-top:64px;
+}
+.footer-container{
+  display:flex; justify-content:space-around; flex-wrap:wrap;
+  gap:32px; max-width:1200px; margin:0 auto;
+}
+.footer-section{ margin:0 20px; min-width:200px; }
+.footer-section h3{
+  font-size:20px; margin-bottom:16px; position:relative; display:inline-block;
+}
+.footer-section h3:after{
+  content:''; position:absolute; width:40%; height:2px;
+  background-color:var(--teal-500); left:30%; bottom:-8px;
+}
+.footer-links{ list-style:none; padding:0; }
+.footer-links li{ margin-bottom:8px; }
+.footer-links a{ color:#e2e8f0; transition:all .2s ease; }
+.footer-links a:hover{ color:var(--teal-500); transform:translateX(4px); display:inline-block; }
+
+.social-icons{
+  list-style:none; padding:0; display:flex; justify-content:center; gap:16px;
+}
+.social-icons a{
+  color:#e2e8f0;
+  display:inline-flex; align-items:center; gap:8px;  /* keeps fallback text neat */
+}
+.social-icons i{ font-size:20px; }
+.social-icons a:hover{ color:var(--teal-500); }
+
+/* Fallback when FA is missing: show readable text from aria-label */
+.no-fa .social-icons i{ display:none; }
+.no-fa .social-icons a::after{
+  content: attr(aria-label);
+  font-weight:600;
+  font-size:16px;
+}
+
+.copyright{ margin-top:16px; font-size:.9rem; opacity:.85; }
+
+/* ---------- Login Overlay (login.html) ---------- */
+.login .overlay{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.6); backdrop-filter:blur(4px);
+}
+
+/* IMPORTANT: hide any stray logo inside the login overlay */
+.login .overlay .logo{ display:none; }
+
+.login-title{
+  color:#fff; font-size:42px; margin:0 0 28px;
+  font-family:"Sour Gummy",sans-serif;
+  text-shadow:0 4px 8px rgba(0,0,0,.3);
+  animation:fadeInDown .8s ease-out both;
+}
+
+.button-container{
+  display:flex; gap:24px; margin-top:10px;
+  animation:fadeInUp .8s ease-out .2s both;
+}
+.btn1,.btn2{
+  background-color:var(--teal-600); color:#fff;
+  border:none; padding:14px 30px; font-size:20px; font-weight:600;
+  border-radius:8px; cursor:pointer; transition:all .3s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.btn1:hover,.btn2:hover{ background-color:var(--teal-500); transform:translateY(-3px); }
+.btn1:active,.btn2:active{ transform:translateY(-1px); }
+
+/* ---------- Shared Form Components ---------- */
+.form-container{
+  display:flex; align-items:center; justify-content:center;
+  height:100vh; background-color:var(--bg);
+  background-image:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);
+}
+.form{
+  background:#fff; padding:48px; border-radius:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.12);
+  max-width:440px; width:100%;
+  animation:fadeIn .8s ease-out both;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.form:hover{ transform:translateY(-5px); box-shadow:0 12px 40px rgba(0,0,0,.16); }
+
+.form .title{
+  text-align:center; font-size:28px; font-weight:700;
+  color:var(--brand-900); margin-bottom:28px;
+}
+.form .title span{ font-weight:400; font-size:16px; color:#64748b; display:block; margin-top:8px; }
+
+.input{
+  width:100%; padding:12px 16px; margin:12px 0;
+  border:1px solid #e2e8f0; border-radius:8px;
+  font-size:16px; background-color:#f8fafc; transition:all .3s ease;
+}
+.input:focus{
+  border-color:var(--teal-500); outline:none;
+  box-shadow:0 0 0 3px rgba(56,178,172,.2);
+  background:#fff;
+}
+
+.button-confirm{
+  width:100%; padding:14px; background-color:var(--brand-900); color:#fff;
+  font-size:18px; font-weight:600; border:none; border-radius:8px;
+  cursor:pointer; transition:all .3s ease; margin-top:16px;
+  box-shadow:0 4px 6px rgba(26,54,93,.2);
+}
+.button-confirm:hover{ background-color:var(--brand-800); transform:translateY(-2px); }
+.button-confirm:active{ transform:translateY(0); }
+
+.signin{ text-align:center; margin-top:24px; color:#475569; }
+.signin a{ color:var(--teal-600); font-weight:700; transition:all .2s ease; }
+.signin a:hover{ color:var(--teal-500); text-decoration:underline; }
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+@keyframes fadeInUp{ from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
+@keyframes fadeInDown{ from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:translateY(0)} }
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none!important; transition:none!important; }
+  .background img{ transform:none!important; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:768px){
+  .navbar{ padding:12px 16px; }
+  .tagline{ font-size:32px; }
+
+  .content{ left:5%; right:5%; top:35%; }
+
+  .search-container{ width:90%; }
+  .search-input{ width:100%; }
+  .search-wrapper{ width:100%; }
+  .search-button{ border-radius:0; }
+
+  .footer-container{ flex-direction:column; align-items:center; gap:40px; }
+  .form{ padding:32px 24px; margin:0 16px; }
+
+  .button-container{ flex-direction:column; width:80%; }
+  .btn1,.btn2{ width:100%; }
+}
+
+@media (max-width:480px){
+  .tagline{ font-size:28px; }
+  .login-title{ font-size:34px; }
+  .slogan{ font-size:22px; padding:0 16px; }
+}
+
+@media (min-width:769px) and (max-width:1024px){
+  .content{ left:8%; }
+  .tagline{ font-size:38px; }
+}
+
+/* ---------- Login Page Adjustments ---------- */
+.login-logo {
+  width: 140px;
+  height: auto;
+  margin-bottom: 20px;
+  animation: fadeInDown 1s ease-out both;
+}
+
+.login .background img {
+  object-fit: cover;
+  width: 100%;
+  height: 100vh;
+  filter: brightness(70%);
+}
+
+.login .overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+
+.login-title {
+  color: #fff;
+  font-size: 42px;
+  font-family: "Sour Gummy", sans-serif;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .login-logo {
+    width: 100px;
+  }
+  .login-title {
+    font-size: 32px;
+  }
+  .button-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

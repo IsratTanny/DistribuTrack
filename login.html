@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Essentials -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DistribuTrack — Choose Your Role</title>
+  <meta name="description" content="Choose your role to sign in to DistribuTrack: Shopkeeper or Distributor." />
+  <link rel="canonical" href="./login.html" />
+
+  <!-- Base styles (uses your updated styles.css) -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Fonts (optional but cached well; page still works offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Sour+Gummy&display=swap" rel="stylesheet" />
+
+  <!-- Performance hints -->
+  <link rel="preload" as="image" href="background1.jpg" />
+
+  <style>
+    /* Page-specific refinements (kept minimal; most lives in styles.css) */
+    body.login { background:#0b2a4b; }
+    .login .background { height: 100dvh; } /* mobile-safe viewport */
+    .role-grid {
+      display:grid;
+      grid-template-columns: repeat(2, minmax(180px, 240px));
+      gap:18px;
+      align-items:stretch;
+      justify-content:center;
+    }
+    @media (max-width:720px){
+      .role-grid { grid-template-columns: 1fr; gap:12px; width:min(92vw, 420px); }
+    }
+
+    .role-card {
+      background: rgba(255,255,255,.96);
+      color: #0f172a;
+      border-radius: 14px;
+      padding: 18px 16px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:center;
+      font-weight:700;
+      font-size:18px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.18);
+      transform: translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease, background .2s ease;
+      border: 1px solid rgba(15,23,42,.06);
+    }
+    .role-card:hover,
+    .role-card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.22);
+      background:#fff;
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+
+    .role-icon {
+      width: 28px; height: 28px; flex: 0 0 28px;
+      display:block;
+      color: var(--teal-600);
+    }
+
+    /* Header block */
+    .login-header {
+      text-align:center;
+      margin-bottom: 22px;
+    }
+    .login-subtitle {
+      color:#e2e8f0;
+      margin: 6px 0 0;
+      font-size: 15px;
+    }
+
+    /* Content card wrapper improves text contrast on bright backgrounds */
+    .login-card {
+      background: rgba(0,0,0,.48);
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      padding: 22px 20px;
+      width:min(92vw, 760px);
+      margin-inline:auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    /* Small footer links under the grid */
+    .links {
+      margin-top: 16px;
+      text-align: center;
+      color:#e2e8f0;
+      font-size: 14px;
+    }
+    .links a { color: var(--teal-500); font-weight:700; }
+    .links a:hover { text-decoration: underline; }
+
+    /* Make sure the page never looks zoomed/cropped on small screens */
+    .login .overlay { padding: clamp(16px, 3dvh, 32px); }
+  </style>
+</head>
+
+<body class="login">
+  <!-- Background -->
+  <div class="background" role="img" aria-label="Background image with abstract delivery theme">
+    <img src="background1.jpg" alt="" aria-hidden="true" />
+
+    <!-- Overlay content -->
+    <div class="overlay">
+      <div class="login-card">
+        <!-- Brand + Title -->
+        <header class="login-header" role="banner">
+          <!-- DistribuTrack logo removed -->
+          <h1 class="login-title">What are you?</h1>
+          <p id="role-help" class="login-subtitle">Choose a role to continue</p>
+        </header>
+
+        <!-- Role chooser (offline-safe SVG icons) -->
+        <nav class="role-grid" aria-labelledby="role-help">
+          <a href="shopkeeper.html" class="role-card" role="button" aria-describedby="role-help">
+            <!-- Shopkeeper icon -->
+            <svg class="role-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12 12a5 5 0 10-5-5 5 5 0 005 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/>
+            </svg>
+            <span>Shopkeeper</span>
+          </a>
+
+          <a href="distributor.html" class="role-card" role="button" aria-describedby="role-help">
+            <!-- Distributor icon (truck) -->
+            <svg class="role-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M3 6h11v7h-1.18A3 3 0 009 14H7a3 3 0 00-2.82 2H3a1 1 0 01-1-1V7a1 1 0 011-1Zm12 1h2.59a2 2 0 011.65.89l1.86 2.79A2 2 0 0122.59 12H21v1a1 1 0 01-1 1h-1.18A3 3 0 0016 14h-1V7Zm-7 9a2 2 0 11-2-2 2 2 0 012 2Zm10 0a2 2 0 11-2-2 2 2 0 012 2Z"/>
+            </svg>
+            <span>Distributor</span>
+          </a>
+        </nav>
+
+        <p class="links">
+          Need an account?
+          <a href="shopkeeper-signup.html">Shopkeeper sign up</a> ·
+          <a href="distributor-signup.html">Distributor sign up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <noscript>
+    <p style="text-align:center; padding:12px; color:#fff;">
+      JavaScript is disabled. You can still continue by selecting your role above.
+    </p>
+  </noscript>
+
+  <!-- Accessibility & keyboard enhancements -->
+  <script>
+    (function () {
+      const grid = document.querySelector('.role-grid');
+      if (!grid) return;
+
+      function addFocus(el) {
+        el.style.outline = '3px solid var(--ring)';
+        el.style.outlineOffset = '3px';
+        el.style.borderRadius = '12px';
+      }
+      function clearFocus(el) {
+        el.style.outline = '';
+        el.style.outlineOffset = '';
+      }
+
+      grid.querySelectorAll('a').forEach(a => {
+        a.addEventListener('focus', () => addFocus(a));
+        a.addEventListener('blur', () => clearFocus(a));
+        a.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            a.click();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

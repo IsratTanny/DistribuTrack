@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DistribuTrack — Delivering Efficiency</title>
+  <meta name="description" content="DistribuTrack connects shopkeepers and distributors with fast ordering, real-time inventory, and reliable delivery tracking." />
+  <link rel="canonical" href="./Index.html" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="DistribuTrack.png" type="image/png" />
+
+  <!-- Fonts & Styles (no icon CDN) -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Sour+Gummy&display=swap" rel="stylesheet" />
+
+  <!-- Performance hints -->
+  <link rel="preload" as="image" href="background1.jpg" />
+  <link rel="preload" as="image" href="DistribuTrack.png" />
+</head>
+
+<body class="home">
+  <!-- Navbar -->
+  <header class="navbar" role="banner">
+    <div class="navbar-start">
+      <a href="Index.html" class="logo-link" aria-label="DistribuTrack Home">
+        <img src="DistribuTrack.png" alt="DistribuTrack logo" class="logo" />
+      </a>
+    </div>
+    <nav aria-label="Primary">
+      <a href="login.html" class="login-button">Login</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="background" aria-label="Hero section with product search">
+    <img src="background1.jpg" alt="" aria-hidden="true" />
+
+    <div class="content">
+      <h1 class="tagline">Delivering Efficiency</h1>
+
+      <!-- Search (SVG icon, works offline) -->
+      <form id="site-search" class="search-container" role="search" action="browse-products.php" method="get" novalidate>
+        <label for="q" class="sr-only">Search products</label>
+
+        <div class="search-wrapper">
+          <input
+            id="q"
+            name="q"
+            type="text"
+            placeholder="Search products..."
+            class="search-input"
+            autocomplete="off"
+            inputmode="search" />
+
+          <button type="submit" class="search-button" aria-label="Search">
+            <!-- Magnifier SVG -->
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+              <path d="M10.5 3a7.5 7.5 0 105.13 12.87l3.5 3.5a1 1 0 001.41-1.41l-3.5-3.5A7.5 7.5 0 0010.5 3zm0 2a5.5 5.5 0 110 11 5.5 5.5 0 010-11z" fill="currentColor"/>
+            </svg>
+            <span class="search-label">Search</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Slogan -->
+  <section class="slogan-section" aria-label="Company slogan">
+    <p class="slogan">You order the goods, we handle the rest</p>
+  </section>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="footer-container">
+      <section class="footer-section" aria-labelledby="services">
+        <h3 id="services">Our Services</h3>
+        <ul class="footer-links">
+          <li><a href="#">Branding</a></li>
+          <li><a href="#">Marketing</a></li>
+          <li><a href="#">Advertisement</a></li>
+        </ul>
+      </section>
+
+      <section class="footer-section" aria-labelledby="connect">
+        <h3 id="connect">Connect With Us</h3>
+        <ul class="social-icons">
+          <li>
+            <a href="#" aria-label="X (Twitter)" title="X (Twitter)">
+              <!-- X logo -->
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M4 4h3.1l5.3 7.2L15.8 4H20l-6.3 8.7L20.5 20H17.4l-5.7-7.7L8.2 20H4l6.7-9.3L4 4z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" aria-label="Facebook" title="Facebook">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M13 22v-8h3l1-4h-4V7c0-1.1.3-2 2-2h2V1h-3c-3 0-5 2-5 5v4H6v4h3v8h4z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" aria-label="LinkedIn" title="LinkedIn">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M6.9 6.5A2.5 2.5 0 116.8 1a2.5 2.5 0 01.1 5.5zM2 8h4v13H2zm7 0h3.8v1.8h.1c.5-.9 1.8-2 3.8-2 4.1 0 4.8 2.7 4.8 6.1V21h-4v-6.1c0-1.4 0-3.2-2-3.2s-2.2 1.5-2.2 3.1V21H9z"/>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" aria-label="Instagram" title="Instagram">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5A5.5 5.5 0 1112 18.5 5.5 5.5 0 0112 7.5zm0 2A3.5 3.5 0 1015.5 13 3.5 3.5 0 0012 9.5zm5.8-2.8a1.2 1.2 0 11-1.2 1.2 1.2 1.2 0 011.2-1.2z"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </div>
+    <p class="copyright">© 2025 DistribuTrack. All Rights Reserved.</p>
+  </footer>
+
+  <noscript>
+    <p style="text-align:center; padding:12px;">JavaScript is disabled. Search and some interactive features may not work.</p>
+  </noscript>
+
+  <!-- Trim empty searches -->
+  <script>
+    (function () {
+      const form = document.getElementById("site-search");
+      const input = document.getElementById("q");
+      form.addEventListener("submit", function (e) {
+        const v = (input.value || "").trim();
+        if (!v) { e.preventDefault(); input.focus(); } else { input.value = v; }
+      });
+    })();
+  </script>
+</body>
+</html>

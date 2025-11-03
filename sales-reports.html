@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"/>
+  <title>DistribuTrack - Sales Reports</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+    <div class="flex items-center space-x-2">
+      <img src="./DistribuTrack.png" alt="logo" class="h-10 rounded-md">
+      <span class="text-lg font-semibold">DistribuTrack</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <a id="backLink" href="distributor-dashboard.html" class="bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition">
+        Back to Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-6 max-w-7xl">
+    <h1 class="text-3xl font-semibold text-blue-700 mb-6 text-center">Sales & Analytics Reports</h1>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <form id="filters" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Range</label>
+          <select id="range" name="range" class="w-full border rounded-md px-3 py-2">
+            <option value="today">Today</option>
+            <option value="week">Last 7 days</option>
+            <option value="month" selected>Last 30 days</option>
+            <option value="year">Last 365 days</option>
+            <option value="all">All time</option>
+            <option value="custom">Custom dates…</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Status</label>
+          <select id="status" name="status" class="w-full border rounded-md px-3 py-2">
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div id="startWrap" class="hidden">
+          <label class="block text-sm text-gray-600 mb-1">Start date</label>
+          <input id="start" type="date" class="w-full border rounded-md px-3 py-2" />
+        </div>
+
+        <div id="endWrap" class="hidden">
+          <label class="block text-sm text-gray-600 mb-1">End date</label>
+          <input id="end" type="date" class="w-full border rounded-md px-3 py-2" />
+        </div>
+
+        <div class="md:col-span-4 flex items-center gap-2 justify-end">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500 transition">
+            Apply Filters
+          </button>
+          <button type="button" id="exportBtn" class="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-500 transition">
+            Export CSV
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-sm text-gray-500">Total Sales</div>
+        <div id="kpiSales" class="text-2xl font-semibold text-gray-800 mt-1">—</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-sm text-gray-500">Orders</div>
+        <div id="kpiOrders" class="text-2xl font-semibold text-gray-800 mt-1">—</div>
+      </div>
+      <div class="bg-white rounded-lg shadow p-5">
+        <div class="text-sm text-gray-500">Items Sold</div>
+        <div id="kpiItems" class="text-2xl font-semibold text-gray-800 mt-1">—</div>
+      </div>
+    </div>
+
+    <!-- Charts & Lists -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Top Products Chart -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-700">Top Products by Revenue</h2>
+          <span id="roleBadge" class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-700">Role</span>
+        </div>
+        <div class="mt-4">
+          <canvas id="topProductsChart" height="220"></canvas>
+        </div>
+        <div id="noProducts" class="hidden text-sm text-gray-500 mt-3">No product sales in this period.</div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="bg-white rounded-lg shadow p-6 overflow-x-auto">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">Recent Orders</h2>
+        <table class="min-w-full">
+          <thead>
+            <tr class="text-left text-sm text-gray-500 border-b">
+              <th class="py-2 pr-3">Order #</th>
+              <th class="py-2 pr-3">Amount</th>
+              <th class="py-2 pr-3">Status</th>
+              <th class="py-2 pr-3">Counterparty</th>
+              <th class="py-2 pr-3">Date</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody" class="text-sm"></tbody>
+        </table>
+        <div id="noOrders" class="hidden text-sm text-gray-500 mt-3">No orders in this period.</div>
+      </div>
+    </div>
+
+    <!-- Error/Info -->
+    <div id="alert" class="hidden mt-6 p-4 rounded border text-sm"></div>
+  </div>
+
+  <script>
+    const fmtBDT = (n) => {
+      try {
+        return new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT', maximumFractionDigits: 2 }).format(Number(n||0));
+      } catch {
+        return '৳' + Number(n||0).toFixed(2);
+      }
+    };
+
+    const rangeEl = document.getElementById('range');
+    const statusEl = document.getElementById('status');
+    const startWrap = document.getElementById('startWrap');
+    const endWrap = document.getElementById('endWrap');
+    const startEl = document.getElementById('start');
+    const endEl = document.getElementById('end');
+
+    const kpiSales = document.getElementById('kpiSales');
+    const kpiOrders = document.getElementById('kpiOrders');
+    const kpiItems = document.getElementById('kpiItems');
+
+    const roleBadge = document.getElementById('roleBadge');
+    const ordersBody = document.getElementById('ordersBody');
+    const noOrders = document.getElementById('noOrders');
+    const noProducts = document.getElementById('noProducts');
+    const backLink = document.getElementById('backLink');
+    const alertBox = document.getElementById('alert');
+
+    let topChart; // Chart.js instance
+    let lastPayload = null; // for export
+
+    function showAlert(type, text) {
+      alertBox.textContent = text;
+      alertBox.className = 'mt-6 p-4 rounded border text-sm ' + (type === 'error'
+        ? 'border-red-200 bg-red-50 text-red-700'
+        : 'border-amber-200 bg-amber-50 text-amber-700');
+      alertBox.classList.remove('hidden');
+      setTimeout(() => alertBox.classList.add('hidden'), 3000);
+    }
+
+    function toggleCustomDates() {
+      const custom = rangeEl.value === 'custom';
+      startWrap.classList.toggle('hidden', !custom);
+      endWrap.classList.toggle('hidden', !custom);
+    }
+    rangeEl.addEventListener('change', toggleCustomDates);
+
+    async function fetchReports() {
+      const params = new URLSearchParams();
+      params.set('range', rangeEl.value);
+      const status = (statusEl.value || '').trim();
+      if (status) params.set('status', status);
+      if (rangeEl.value === 'custom') {
+        if (startEl.value) params.set('start_date', startEl.value);
+        if (endEl.value) params.set('end_date', endEl.value);
+      }
+
+      const res = await fetch('reports.php?' + params.toString(), { headers: { 'Accept': 'application/json' }});
+      if (!res.ok) throw new Error('Network error ' + res.status);
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Unknown error');
+      return json;
+    }
+
+    function renderKPIs(summary) {
+      kpiSales.textContent = fmtBDT(summary.total_sales ?? 0);
+      kpiOrders.textContent = Number(summary.orders_count ?? 0);
+      kpiItems.textContent = Number(summary.items_sold ?? 0);
+    }
+
+    function renderRole(role) {
+      roleBadge.textContent = role === 'distributor' ? 'Distributor' : 'Shopkeeper';
+      backLink.href = role === 'distributor' ? 'distributor-dashboard.html' : 'shopkeeper-dashboard.html';
+    }
+
+    function renderTopProducts(products) {
+      const labels = (products || []).map(p => p.product_name);
+      const revenue = (products || []).map(p => Number(p.revenue || 0));
+
+      if (topChart) {
+        topChart.destroy();
+      }
+
+      if (!labels.length) {
+        noProducts.classList.remove('hidden');
+        return;
+      }
+      noProducts.classList.add('hidden');
+
+      const ctx = document.getElementById('topProductsChart').getContext('2d');
+      topChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Revenue (BDT)',
+            data: revenue
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => ' ' + fmtBDT(context.parsed.y)
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: (value) => fmtBDT(value)
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderOrders(orders, role) {
+      ordersBody.innerHTML = '';
+      if (!orders || !orders.length) {
+        noOrders.classList.remove('hidden');
+        return;
+      }
+      noOrders.classList.add('hidden');
+
+      const frag = document.createDocumentFragment();
+      orders.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b last:border-0';
+        const counterparty = role === 'distributor' ? (o.shopkeeper_name || '—') : (o.distributor_name || '—');
+        const dateStr = o.created_at ? new Date(o.created_at.replace(' ', 'T')).toLocaleString() : '—';
+        tr.innerHTML = `
+          <td class="py-2 pr-3 text-gray-800">#${o.order_id}</td>
+          <td class="py-2 pr-3">${fmtBDT(o.total_amount)}</td>
+          <td class="py-2 pr-3">
+            <span class="px-2 py-0.5 rounded text-xs ${
+              o.status === 'Paid' ? 'bg-green-100 text-green-700' :
+              o.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+              o.status === 'Delivered' ? 'bg-blue-100 text-blue-700' :
+              o.status === 'Cancelled' ? 'bg-red-100 text-red-700' :
+              'bg-gray-100 text-gray-700'
+            }">${o.status || '—'}</span>
+          </td>
+          <td class="py-2 pr-3 text-gray-600">${counterparty}</td>
+          <td class="py-2 pr-3 text-gray-500">${dateStr}</td>
+        `;
+        frag.appendChild(tr);
+      });
+      ordersBody.appendChild(frag);
+    }
+
+    function toCSV(rows) {
+      return rows.map(r => r.map(v => {
+        const s = (v ?? '').toString().replace(/"/g, '""');
+        return `"${s}"`;
+      }).join(',')).join('\n');
+    }
+
+    function exportCSV(payload) {
+      const lines = [];
+
+      // Summary block
+      lines.push('Summary');
+      lines.push(toCSV([['Total Sales', 'Orders', 'Items Sold']]));
+      lines.push(toCSV([[payload.summary.total_sales, payload.summary.orders_count, payload.summary.items_sold]]));
+
+      lines.push('');
+      // Top products
+      lines.push('Top Products');
+      lines.push(toCSV([['Product ID', 'Product Name', 'Total Sold', 'Revenue (BDT)']]));
+      (payload.top_products || []).forEach(p => {
+        lines.push(toCSV([[p.product_id, p.product_name, p.total_sold, p.revenue]]));
+      });
+
+      lines.push('');
+      // Recent orders
+      lines.push('Recent Orders');
+      lines.push(toCSV([['Order #', 'Amount (BDT)', 'Status', 'Shopkeeper', 'Distributor', 'Created At']]));
+      (payload.recent_orders || []).forEach(o => {
+        lines.push(toCSV([[o.order_id, o.total_amount, o.status, o.shopkeeper_name || '', o.distributor_name || '', o.created_at || '']]));
+      });
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sales_report_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function load() {
+      try {
+        const data = await fetchReports();
+        lastPayload = data;
+
+        renderRole(data.role);
+        renderKPIs(data.summary || {});
+        renderTopProducts(data.top_products || []);
+        renderOrders(data.recent_orders || [], data.role);
+
+      } catch (err) {
+        console.error(err);
+        showAlert('error', 'Failed to load reports. Please try again.');
+      }
+    }
+
+    document.getElementById('filters').addEventListener('submit', (e) => {
+      e.preventDefault();
+      load();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      if (!lastPayload) {
+        showAlert('warn', 'Load data before exporting.');
+        return;
+      }
+      exportCSV(lastPayload);
+    });
+
+    // Init
+    toggleCustomDates();
+    load();
+  </script>
+</body>
+</html>
